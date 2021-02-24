@@ -35,7 +35,7 @@ app.get("/api/timestamp/:timestamp", function (req, res) {
     res.json({ error: "Invalid Date" });
   } else if (
     req.params.timestamp.includes("-") ||
-    req.params.timestamp.includes("-")
+    req.params.timestamp.includes(" ")
   ) {
     let newDate = new Date(req.params.timestamp);
     res.json({ unix: Date.parse(newDate), utc: newDate.toUTCString() });
