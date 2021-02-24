@@ -1,3 +1,5 @@
+var invalidDate = require('./helper/dateChecker')
+
 // server.js
 // where your node app starts
 
@@ -30,25 +32,16 @@ app.get("/api/timestamp", function(req, res) {
 })
 
 app.get("/api/timestamp/:timestamp", function(req, res) {
-  // req.params.timestamp.includes('-') || req.params.timestamp.includes('-')
-  if (req.params.timestamp.includes(' ')) {
+  if (invalidDate(req.params.timestamp)) {
+    res.json({"error":"Invalid Date"})
+  } else if (req.params.timestamp.includes('-') || req.params.timestamp.includes('-')) {
     let newDate = new Date(req.params.timestamp)
-    res.json({"unix":Date.parse(newDate),"utc": newDate.toUTCString()})
-  } else if (req.params.timestamp.includes('-')) {
-    let newDate = new Date(req.params.timestamp)
-    if (String(newDate) === 'Invalid Date') {
-      res.json({"error":"Invalid Date"})
-    }
     res.json({"unix":Date.parse(newDate),"utc": newDate.toUTCString()})
   } else {
     let newDate = new Date(+req.params.timestamp)
-    if (String(newDate) === 'Invalid Date') {
-      res.json({"error":"Invalid Date"})
-    }
     res.json({"unix":Date.parse(newDate),"utc": newDate.toUTCString()})
   }
 })
-
 
 
 // listen for requests :)
